@@ -1,0 +1,23 @@
+# Syntax Colouring Map
+
+# Datatypes (KEYWORD1)
+LCDGraph	KEYWORD1
+
+# Methods and Functions (KEYWORD2)
+begin	KEYWORD2
+add	KEYWORD2
+clear	KEYWORD2
+setRegisters	KEYWORD2
+display	KEYWORD2
+autoRescale	KEYWORD2
+end	KEYWORD2
+length	KEYWORD2
+yMin	KEYWORD2
+yMax	KEYWORD2
+filled	KEYWORD2
+axis	KEYWORD2
+
+
+# Instances (KEYWORD2)
+
+# Constants (LITERAL1)
