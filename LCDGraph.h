@@ -25,7 +25,7 @@ class LCDGraph {
          * @param width is the width in characters.
          * @param height is the height in characters on the display, but should be 1 currently.
          * @param firstRegister is the first register to use in the display. As there are only 8, they may need to be shared around.
-         * For example, using 2 4 byte wide graphs would be:
+         * For example, using 2 4 character wide graphs would be:
          * LCDGraph graph1(4, 1, 0);
          * LCDGraph graph2(4, 1, 4);
          * An 8 char wide graph must start at 0, a 7 char wide at 0 or 1, ...
