@@ -2,7 +2,7 @@
  * LCDGraph.h - Arduino library for drawing graphs on alphanumeric LCDs using custom chars.
  * Jotham Gates
  * Created 27/11/2020
- * Last Modified 20/01/2021
+ * Last Modified 07/02/2021
  */
 
 // TODO: Make this work with something other than a 8 by 1 graph.
@@ -103,22 +103,28 @@ class LCDGraph {
                 for(uint8_t row = 0; row < LCDGRAPH_CHAR_HEIGHT; row++) {
                     character[row] = 0; // Clear the row in case there is something left in memory
                     // Draw the x axis if needed
-                    if(axis && (row == xAxis)) {
+                    if(showXAxis && (row == xAxis)) {
                         character[row] = 0xff; // Use exclusive or so that any point on the x axis is now light to stand out.
                     }
                     // For each column, check if a point should be drawn in the row.
                     for(uint8_t col = 0; col < LCDGRAPH_CHAR_WIDTH; col++) {
                         // Draw the y axis if needed
-                        if(axis && !col && !block) {
+                        if(showYAxis && !col && !block) {
                             character[row] |= 1 << (LCDGRAPH_CHAR_WIDTH -1);
                         }
 
                         // Draw the point on the graph or point under it if shading
                         if((printMask >> col) & 1) { // If there should be a point drawn on this column
+                            uint8_t point = 1 << (LCDGRAPH_CHAR_WIDTH -1 -col);
                             if(mappedData[col] == row) { // An actual point
-                                character[row] ^= 1 << (LCDGRAPH_CHAR_WIDTH -1 -col); // XOR so that any point on an axis appears white.
-                            } else if(filled && mappedData[col] < row) { // The shaded area below
-                                character[row] |= 1 << (LCDGRAPH_CHAR_WIDTH -1 -col); // Normal OR so the axis is not inverted
+                                // Either XOR or OR to display or not display axis intercepts as the pixels inverted
+                                if(intercepts) {
+                                    character[row] ^= point; // XOR so that any point on an axis appears white.
+                                } else {
+                                    character[row] |= point; // A point on the axis will be hidden
+                                }
+                            } else if(filled && ((row > mappedData[col] && row < xAxis) || (row < mappedData[col] && row > xAxis))) { // The shaded area below
+                                character[row] |= point; // Normal OR so the axis is not inverted
                             }
                         }
                     }
@@ -139,17 +145,21 @@ class LCDGraph {
         }
 
 
-        /** Rescales the graph to fit all data. If force0 is set to true, will make
-         * sure that 0 is included as either the minimum or maximum.
+        /** Rescales the graph to fit all data.
+         * @param force0 will make sure that 0 is included as either the minimum or maximum if true.
          * 0 will also be included as a limit if there is only a single value.
+         * @param allowSmallerRange will allow yMin to increase and yMax to decrease to fit all
+         * current data. If false, the range can only expand (yMin decrease and yMax increase).
          */
         // TODO: Padding instead of including 0
-        void autoRescale(bool force0) {
+        void autoRescale(bool force0 = false, bool allowSmallerRange = true) {
             // Find the minimum and maximum
-            DataFormat value = _atPosition(0);
-            yMin = value;
-            yMax = value;
-            for(uint8_t i = 1; i < length; i++) {
+            if(allowSmallerRange) {
+                DataFormat value = _atPosition(0);
+                yMin = value;
+                yMax = value;
+            }
+            for(uint8_t i = 0; i < length; i++) {
                 DataFormat value = _atPosition(i);
                 if(value < yMin) {
                     yMin = value;
@@ -181,7 +191,9 @@ class LCDGraph {
         DataFormat yMin = 0;
         DataFormat yMax = 255;
         bool filled = true; // TODO: Make filled to the x axis rather than bottom of screen.
-        bool axis = true; // Show axis
+        bool showXAxis = true; // Show x axis
+        bool showYAxis = true;
+        bool intercepts = false; // Make any x and y axis intercepts display as an off pixel when axis are displayed
 
     private:
         /** Translates the position in order into the physical address and returns the value at the address. */

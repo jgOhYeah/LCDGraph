@@ -6,13 +6,13 @@
 - [Constructor](#constructor)
 - [Attributes](#attributes)
 - [Methods](#methods)
-  - [`begin(LiquidCrystal *lcd)`](#beginliquidcrystal-lcd)
-  - [`add(DataFormat value)`](#adddataformat-value)
-  - [`clear()`](#clear)
-  - [`setRegisters()`](#setregisters)
-  - [`display(uint8_t x, uint8_t y)`](#displayuint8_t-x-uint8_t-y)
-  - [`autoRescale(bool force0)`](#autorescalebool-force0)
-  - [`end()`](#end)
+  - [`void begin(LiquidCrystal *lcd)`](#void-beginliquidcrystal-lcd)
+  - [`void add(DataFormat value)`](#void-adddataformat-value)
+  - [`void clear()`](#void-clear)
+  - [`void setRegisters()`](#void-setregisters)
+  - [`void display(uint8_t x, uint8_t y)`](#void-displayuint8_t-x-uint8_t-y)
+  - [`void autoRescale(bool force0 = false, bool allowSmallerRange = true)`](#void-autorescalebool-force0--false-bool-allowsmallerrange--true)
+  - [`void end()`](#void-end)
 
 # Including
 Add these lines to the top of your main project file:
@@ -43,17 +43,19 @@ LCDGraph<int> graph2(4, 1, 4);
 An 8 char wide graph must start at register 0 in the display, a 7 char wide at 0 or 1, ...
 
 # Attributes
-| Name     | Data Type                               | Comments                                                                | Should be written to | Default |
-| -------- | --------------------------------------- | ----------------------------------------------------------------------- | :------------------: | :-----: |
-| `length` | `uint8_t` (`byte`)                      | The number of points in the circular buffer                             |          No          |    0    |
-| `yMin`   | `DataFormat` (specified in constructor) | The current minimum of the Y axis. Can be written to to set it manually |         Yes          |    0    |
-| `yMax`   | `DataFormat` (specified in constructor) | The current maximum of the Y axis. Can be written to to set it manually |         Yes          |   255   |
-| `filled` | `bool`                                  | Whether everything under the line will be filled in                     |         Yes          | `true`  |
-| `axis`   | `bool`                                  | Whether to draw X and Y axis as solid lines.                            |         Yes          | `true`  |
+| Name         | Data Type                               | Comments                                                                                                                                                                                                            | Should be written to | Default |
+| ------------ | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------: | :-----: |
+| `length`     | `uint8_t` (`byte`)                      | The number of points in the circular buffer                                                                                                                                                                         |          No          |    0    |
+| `yMin`       | `DataFormat` (specified in constructor) | The current minimum of the Y axis. Can be written to to set it manually                                                                                                                                             |         Yes          |    0    |
+| `yMax`       | `DataFormat` (specified in constructor) | The current maximum of the Y axis. Can be written to to set it manually                                                                                                                                             |         Yes          |   255   |
+| `filled`     | `bool`                                  | Whether everything under the line will be filled in                                                                                                                                                                 |         Yes          | `true`  |
+| `showXAxis`  | `bool`                                  | Whether to draw the X axis as a solid line.                                                                                                                                                                         |         Yes          | `true`  |
+| `showYAxis`  | `bool`                                  | Whether to draw the Y axis as a solid line.                                                                                                                                                                         |         Yes          | `true`  |
+| `intercepts` | `bool`                                  | If `true`, makes any x and y axis intercepts display as an off pixel when axis are displayed so that points on axis do not disappear. Can be a bit misleading if the x axis is on the top or bottom of the display. |         Yes          | `false`  |
 
 
 # Methods
-## `begin(LiquidCrystal *lcd)`
+## `void begin(LiquidCrystal *lcd)`
 Gives the library the pointer to the lcd object to use.
 For example:
 ```c++
@@ -62,22 +64,24 @@ lcd.begin(20, 4);
 graph.begin(&lcd);
 ```
 
-## `add(DataFormat value)`
+## `void add(DataFormat value)`
 Adds a data point to the internal graph circular buffer.
 Chucks out the earlist data point if the buffer is full.
 
-## `clear()`
+## `void clear()`
 Removes all data from the circular buffer
 
-## `setRegisters()`
+## `void setRegisters()`
 Generates the custom characters from the data currently in the circular buffer and sends it to the custom character registers in the lcd. If any of the special characters or this graph are already on the display, they will be updated. Otherwise, `display(uint8_t x, uint8_t y);` needs to be called to draw the graph from the registers.
 
-## `display(uint8_t x, uint8_t y)`
+## `void display(uint8_t x, uint8_t y)`
 Displays the graph in the correct location on the display. setRegisters needs to be called beforehand to display the latest data. In all displays I have used, `display` only needs to be called once if the graph is going to be continually be updated in the same location.
 
-## `autoRescale(bool force0)`
-Rescales the y axis of the graph to fit all data. If `force0` is set to `true`, will make sure that 0 is included as either the minimum or maximum. 0 will also be included as a limit if there is only a single value.
+## `void autoRescale(bool force0 = false, bool allowSmallerRange = true)`
+Rescales the graph to fit all data.
+- `force0` will make sure that 0 is included as either the minimum or maximum if true. 0 will also be included as a limit if there is only a single value.
+- `allowSmallerRange` will allow `yMin` to increase and `yMax` to decrease to fit all current data. If false, the range can only expand (`yMin` decrease and `yMax` increase).
 
-## `end()`
+## `void end()`
 Deallocates the internal circular buffer from memory.
 It is preferable to only create the instance and use it as global (with `clear()` if necessary) for the entire time the program is running to avoid memory fragmentation.

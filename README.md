@@ -21,7 +21,7 @@ The x axis is always the data point while the y axis can be scaled as required, 
   - [Drawing the graph on the display](#drawing-the-graph-on-the-display)
   - [Automatic scaling of the y axis](#automatic-scaling-of-the-y-axis)
 - [API](#api)
-  - [Examples](#examples)
+- [Examples](#examples)
 
 # Connections
 All interfacing to the lcd is handled by the built in Arduino `LiquidCrystal` library, meaning that the `LCDGraph` library has no extra requirements on top of the `LiquidCrystal` library for how the display is connected.
@@ -94,7 +94,7 @@ graph.setRegisters();
 The are a few more methods and attributes that were not discussed above. Information on them can be found in the API documentation.
 See [API.md](API.md) for documentation on the publically available methods and attributes.
 
-## Examples
+# Examples
 For examples, see the [examples](examples) folder.
 
 
