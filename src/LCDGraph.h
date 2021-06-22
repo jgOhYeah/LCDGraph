@@ -2,11 +2,10 @@
  * LCDGraph.h - Arduino library for drawing graphs on alphanumeric LCDs using custom chars.
  * Jotham Gates
  * Created 27/11/2020
- * Last Modified 07/02/2021
+ * Last Modified 22/06/2021
  */
 
-// TODO: Make this work with something other than a 8 by 1 graph.
-// TODO: Make the data work with templates. - Everything put in the header file for this purpose
+// TODO: Make this work with something other than a 1 row graph.
 #ifndef LCDGraph_h
 #define LCDGraph_h
 

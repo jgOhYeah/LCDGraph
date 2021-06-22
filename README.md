@@ -1,7 +1,7 @@
 # LCDGraph
 An Arduino library for drawing line graphs on alphanumeric displays using custom characters
 
-![LCD Graph Mockup](Pictures/Mockup.svg)
+![LCD Graph Mockup](extras/Mockup.svg)
 
 This library uses custom characters to draw simple line graphs on Hitachi HD44780 based alphanumeric displays using the built in [LiquidCrystal](https://www.arduino.cc/en/Reference/LiquidCrystal) library.
 
@@ -92,7 +92,7 @@ graph.setRegisters();
 
 # API
 The are a few more methods and attributes that were not discussed above. Information on them can be found in the API documentation.
-See [API.md](API.md) for documentation on the publically available methods and attributes.
+See [API.md](extras/API.md) for documentation on the publically available methods and attributes.
 
 # Examples
 For examples, see the [examples](examples) folder.
@@ -100,4 +100,4 @@ For examples, see the [examples](examples) folder.
 
 Just to prove that it runs, here is a photo of an unfinished project using it:
 
-![Photo of a 40x2 lcd displaying the graph](Pictures/InUse.jpg)
+![Photo of a 40x2 lcd displaying the graph](extras/InUse.jpg)
