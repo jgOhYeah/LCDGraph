@@ -1,4 +1,5 @@
-# LCDGraph
+# LCDGraph ![Arduino Lint Actions Status](https://github.com/jgOhYeah/LCDGraph/actions/workflows/arduino-lint.yml/badge.svg)
+
 An Arduino library for drawing line graphs on alphanumeric displays using custom characters
 
 ![LCD Graph Mockup](extras/Mockup.svg)
