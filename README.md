@@ -1,4 +1,4 @@
-# LCDGraph ![Arduino Lint Actions Status](https://github.com/jgOhYeah/LCDGraph/actions/workflows/arduino-lint.yml/badge.svg)
+# LCDGraph ![Arduino Lint Actions Status](https://github.com/jgOhYeah/LCDGraph/actions/workflows/arduino-lint.yml/badge.svg) <!-- omit in toc -->
 
 An Arduino library for drawing line graphs on alphanumeric displays using custom characters
 
@@ -8,9 +8,7 @@ This library uses custom characters to draw simple line graphs on Hitachi HD4478
 
 The x axis is always the data point while the y axis can be scaled as required, even after data has been entered.
 
-## Table of Contents
-- [LCDGraph](#lcdgraph)
-  - [Table of Contents](#table-of-contents)
+## Table of Contents <!-- omit in toc -->
 - [Connections](#connections)
 - [Getting started](#getting-started)
   - [Installing the library](#installing-the-library)
