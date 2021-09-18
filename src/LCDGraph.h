@@ -46,7 +46,7 @@ class LCDGraph {
          */
         void add(DataFormat value) {
             // Calculate the position for the new data point
-            uint8_t position = _start + length;
+            uint8_t position = _start + len;
             uint8_t dataSize = _width * LCDGRAPH_CHAR_WIDTH;
             if(position >= dataSize) {
                 position -= dataSize;
@@ -55,8 +55,8 @@ class LCDGraph {
             // Add the new data point
             _data[position] = value;
             // Either increase the length if not full or update the address of the first element to be the next as we will have just overwritten the first element if the buffer is at capacity.
-            if(length < dataSize) {
-                length++;
+            if(len < dataSize) {
+                len++;
             } else {
                 _start++;
                 if(_start == dataSize) { // Wrap around if needed
@@ -67,7 +67,7 @@ class LCDGraph {
 
         /** Removes all data from the circular buffer */
         void clear() {
-            length = 0;
+            len = 0;
         }
 
         /** Generates the custom characters from the data currently in the circular buffer and sends it to the custom character registers in the lcd.
@@ -90,7 +90,7 @@ class LCDGraph {
                 uint8_t startPos = block * LCDGRAPH_CHAR_WIDTH;
 
                 // Load data if available and map it to fit
-                for(uint8_t i = 0; i < LCDGRAPH_CHAR_WIDTH && accessed < length; i++, accessed++) {
+                for(uint8_t i = 0; i < LCDGRAPH_CHAR_WIDTH && accessed < len; i++, accessed++) {
                     mappedData[i] = map(_atPosition(i + startPos), yMax, yMin, 0, LCDGRAPH_CHAR_HEIGHT-1);
                     printMask |= 1 << i; // Set the value as printable
                 }
@@ -158,7 +158,7 @@ class LCDGraph {
                 yMin = value;
                 yMax = value;
             }
-            for(uint8_t i = 0; i < length; i++) {
+            for(uint8_t i = 0; i < len; i++) {
                 DataFormat value = _atPosition(i);
                 if(value < yMin) {
                     yMin = value;
@@ -186,7 +186,13 @@ class LCDGraph {
             free(_data);
         }
 
-        uint8_t length = 0; // Number of data points being shown
+        /**
+         * Returns the number of datapoints currently being shown
+         */
+        uint8_t length() {
+            return len;
+        }
+
         DataFormat yMin = 0;
         DataFormat yMax = 255;
         bool filled = true; // TODO: Make filled to the x axis rather than bottom of screen.
@@ -213,6 +219,7 @@ class LCDGraph {
         uint8_t _height = 1;
 
         uint8_t _firstRegister = 0;
+        uint8_t len = 0; // Number of data points being shown
 
 };
 

@@ -1,7 +1,5 @@
-# LCDGraph API
-## Table of Contents
-- [LCDGraph API](#lcdgraph-api)
-  - [Table of Contents](#table-of-contents)
+# LCDGraph API <!-- omit in toc -->
+## Table of Contents <!-- omit in toc -->
 - [Including](#including)
 - [Constructor](#constructor)
 - [Attributes](#attributes)
@@ -12,6 +10,7 @@
   - [`void setRegisters()`](#void-setregisters)
   - [`void display(uint8_t x, uint8_t y)`](#void-displayuint8_t-x-uint8_t-y)
   - [`void autoRescale(bool force0 = false, bool allowSmallerRange = true)`](#void-autorescalebool-force0--false-bool-allowsmallerrange--true)
+  - [`uint8_t length()`](#uint8_t-length)
   - [`void end()`](#void-end)
 
 # Including
@@ -43,15 +42,14 @@ LCDGraph<int> graph2(4, 1, 4);
 An 8 char wide graph must start at register 0 in the display, a 7 char wide at 0 or 1, ...
 
 # Attributes
-| Name         | Data Type                               | Comments                                                                                                                                                                                                            | Should be written to | Default |
-| ------------ | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------: | :-----: |
-| `length`     | `uint8_t` (`byte`)                      | The number of points in the circular buffer                                                                                                                                                                         |          No          |    0    |
-| `yMin`       | `DataFormat` (specified in constructor) | The current minimum of the Y axis. Can be written to to set it manually                                                                                                                                             |         Yes          |    0    |
-| `yMax`       | `DataFormat` (specified in constructor) | The current maximum of the Y axis. Can be written to to set it manually                                                                                                                                             |         Yes          |   255   |
-| `filled`     | `bool`                                  | Whether everything under the line will be filled in                                                                                                                                                                 |         Yes          | `true`  |
-| `showXAxis`  | `bool`                                  | Whether to draw the X axis as a solid line.                                                                                                                                                                         |         Yes          | `true`  |
-| `showYAxis`  | `bool`                                  | Whether to draw the Y axis as a solid line.                                                                                                                                                                         |         Yes          | `true`  |
-| `intercepts` | `bool`                                  | If `true`, makes any x and y axis intercepts display as an off pixel when axis are displayed so that points on axis do not disappear. Can be a bit misleading if the x axis is on the top or bottom of the display. |         Yes          | `false`  |
+| Name         | Data Type                               | Comments                                                                                                                                                                                                            | Default |
+| ------------ | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-----: |
+| `yMin`       | `DataFormat` (specified in constructor) | The current minimum of the Y axis. Can be written to to set it manually                                                                                                                                             |    0    |
+| `yMax`       | `DataFormat` (specified in constructor) | The current maximum of the Y axis. Can be written to to set it manually                                                                                                                                             |   255   |
+| `filled`     | `bool`                                  | Whether everything under the line will be filled in                                                                                                                                                                 | `true`  |
+| `showXAxis`  | `bool`                                  | Whether to draw the X axis as a solid line.                                                                                                                                                                         | `true`  |
+| `showYAxis`  | `bool`                                  | Whether to draw the Y axis as a solid line.                                                                                                                                                                         | `true`  |
+| `intercepts` | `bool`                                  | If `true`, makes any x and y axis intercepts display as an off pixel when axis are displayed so that points on axis do not disappear. Can be a bit misleading if the x axis is on the top or bottom of the display. | `false` |
 
 
 # Methods
@@ -81,6 +79,9 @@ Displays the graph in the correct location on the display. setRegisters needs to
 Rescales the graph to fit all data.
 - `force0` will make sure that 0 is included as either the minimum or maximum if true. 0 will also be included as a limit if there is only a single value.
 - `allowSmallerRange` will allow `yMin` to increase and `yMax` to decrease to fit all current data. If false, the range can only expand (`yMin` decrease and `yMax` increase).
+
+## `uint8_t length()`
+Returns the number of points in the circular buffer.
 
 ## `void end()`
 Deallocates the internal circular buffer from memory.
