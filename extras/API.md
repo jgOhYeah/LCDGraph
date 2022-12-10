@@ -4,7 +4,7 @@
 - [Constructor](#constructor)
 - [Attributes](#attributes)
 - [Methods](#methods)
-  - [`void begin(LiquidCrystal *lcd)`](#void-beginliquidcrystal-lcd)
+  - [`void begin(LCDLibrary *lcd)`](#void-beginlcdlibrary-lcd)
   - [`void add(DataFormat value)`](#void-adddataformat-value)
   - [`void clear()`](#void-clear)
   - [`void setRegisters()`](#void-setregisters)
@@ -24,11 +24,12 @@ Add these lines to the top of your main project file:
 
 # Constructor
 ```c++
-LCDGraph<DataFormat>(uint8_t width, uint8_t height, uint8_t firstRegister)
+LCDGraph<DataFormat=int16_t, LCDLibrary=LiquidCrystal>(uint8_t width, uint8_t height, uint8_t firstRegister)
 ```
 Initialises the class.
 Currently, the height must be 1 as vertical tiling is not yet implemented.
 - `DataFormat` is a template and is the data format that will be expected when calling `add` and setting and reading `yMax` and `yMin`. This can be changed to a smaller data type such as a `byte` to save memory if needed or a larger one such as an `unsigned long` or `float` if larger or floating point numbers need to be displayed. Because each data type will require its own copy of the class, it is recommended that if possible, only a single data type is used accross all instances to save program memory.
+- `LCDLibrary` is a template for the library used to drive the display. By default it is set to the built in `LiquidCrystal` library, but has also been tested to work with the [`LiquidCrystal_I2C`](https://github.com/johnrickman/LiquidCrystal_I2C) library.
 - `width` is the width in characters.
 - `height` is the height in characters on the display, but should be 1 currently.
 - `firstRegister` is the first register to use in the display. As there are only 8, they may need to be shared around.
@@ -40,6 +41,11 @@ LCDGraph<int> graph2(4, 1, 4);
 ```
 
 An 8 char wide graph must start at register 0 in the display, a 7 char wide at 0 or 1, ...
+
+The `height` parameter can be left out if desired to default to a height of 1:
+```c++
+LCDGraph<DataFormat=int16_t, LCDLibrary=LiquidCrystal>(uint8_t width, uint8_t firstRegister)
+```
 
 # Attributes
 | Name         | Data Type                               | Comments                                                                                                                                                                                                            | Default |
@@ -53,7 +59,7 @@ An 8 char wide graph must start at register 0 in the display, a 7 char wide at 0
 
 
 # Methods
-## `void begin(LiquidCrystal *lcd)`
+## `void begin(LCDLibrary *lcd)`
 Gives the library the pointer to the lcd object to use.
 For example:
 ```c++
@@ -85,4 +91,4 @@ Returns the number of points in the circular buffer.
 
 ## `void end()`
 Deallocates the internal circular buffer from memory.
-It is preferable to only create the instance and use it as global (with `clear()` if necessary) for the entire time the program is running to avoid memory fragmentation.
+It is preferable to only create the instance and use it as global (with `clear()` if necessary) for the entire time the program is running to avoid memory fragmentation issues.

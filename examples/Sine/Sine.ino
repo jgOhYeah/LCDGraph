@@ -12,7 +12,7 @@
 
 // Constructors
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
-LCDGraph<float> graph(8, 1, 0); // We want to store floats in this case
+LCDGraph<float> graph(8, 0); // We want to store floats in this case
 
 void setup() {
     // Set up the lcd

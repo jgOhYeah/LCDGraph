@@ -4,7 +4,7 @@ An Arduino library for drawing line graphs on alphanumeric displays using custom
 
 ![LCD Graph Mockup](extras/Mockup.svg)
 
-This library uses custom characters to draw simple line graphs on Hitachi HD44780 based alphanumeric displays using the built in [LiquidCrystal](https://www.arduino.cc/en/Reference/LiquidCrystal) library.
+This library uses custom characters to draw simple line graphs on Hitachi HD44780 based alphanumeric displays using the built in [LiquidCrystal](https://www.arduino.cc/en/Reference/LiquidCrystal) library. Other libraries can be used if needed for the likes of displays driven through I2C.
 
 The x axis is always the data point while the y axis can be scaled as required, even after data has been entered.
 
@@ -19,6 +19,7 @@ The x axis is always the data point while the y axis can be scaled as required, 
   - [Adding data to the graph](#adding-data-to-the-graph)
   - [Drawing the graph on the display](#drawing-the-graph-on-the-display)
   - [Automatic scaling of the y axis](#automatic-scaling-of-the-y-axis)
+- [Use with other LCD libraries and I2C displays](#use-with-other-lcd-libraries-and-i2c-displays)
 - [API](#api)
 - [Examples](#examples)
 
@@ -87,6 +88,26 @@ The data in the example above goes outside the range of [10, 20]. We can automat
 ```c++
 graph.autorescale(false); // Rescale the y axis, do not force it to go through 0
 graph.setRegisters();
+```
+
+# Use with other LCD libraries and I2C displays
+Templates can be used to specify the library used to drive the display similarly to the data format used. This will default to the built in `LiquidCrystal` library if not specified.
+
+Any library object given should have many of the same methods and behaviours as `LiquidCrystal`.
+
+The [`LiquidCrystal_I2C`](https://github.com/johnrickman/LiquidCrystal_I2C) library is used in the [I2CDisplay](examples/I2CDisplay/I2CDisplay.ino) example. The following is a short extract:
+```c++
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
+#include <LCDGraph.h>
+
+// ...
+
+LiquidCrystal_I2C lcd(LCD_ADDRESS, LCD_COLS, LCD_ROWS);
+LCDGraph<float, LiquidCrystal_I2C> graph(8, 0); // We want to store floats in this case
+
+// ...
+
 ```
 
 # API

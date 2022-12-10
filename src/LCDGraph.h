@@ -2,7 +2,7 @@
  * LCDGraph.h - Arduino library for drawing graphs on alphanumeric LCDs using custom chars.
  * Jotham Gates
  * Created 27/11/2020
- * Last Modified 22/06/2021
+ * Last Modified 10/12/2022
  */
 
 // TODO: Make this work with something other than a 1 row graph.
@@ -15,8 +15,8 @@
 #define LCDGRAPH_MAX_CHARS 8
 #define LCDGRAPH_CHAR_WIDTH 5
 #define LCDGRAPH_CHAR_HEIGHT 8 // Could be 10 on some LCDs
-#define DataFormat int16_t
-template <typename DataFormat>
+
+template <typename DataFormat=int16_t, class LCDLibrary=LiquidCrystal>
 class LCDGraph {
     public:
         /** Initialises the class.
@@ -36,8 +36,24 @@ class LCDGraph {
             _data = (DataFormat *)malloc(width * LCDGRAPH_CHAR_WIDTH * sizeof(DataFormat));
         }
 
+        /** Initialises the class with a single character height.
+         * Currently, the height must be 1 as vertical tiling is not yet implemented.
+         * @param width is the width in characters.
+         * @param firstRegister is the first register to use in the display. As there are only 8, they may need to be shared around.
+         * For example, using 2 4 character wide graphs would be:
+         * LCDGraph graph1(4, 0);
+         * LCDGraph graph2(4, 4);
+         * An 8 char wide graph must start at 0, a 7 char wide at 0 or 1, ...
+         */
+        LCDGraph(uint8_t width, uint8_t firstRegister) {
+            _width = width;
+            _height = 1;
+            _firstRegister = firstRegister;
+            _data = (DataFormat *)malloc(width * LCDGRAPH_CHAR_WIDTH * sizeof(DataFormat));
+        }
+
         /** Sets the pointer to the lcd object */
-        void begin(LiquidCrystal *lcd) {
+        void begin(LCDLibrary *lcd) {
             _lcd = lcd;
         }
 
@@ -212,7 +228,7 @@ class LCDGraph {
             return _data[position];
         }
 
-        LiquidCrystal *_lcd;
+        LCDLibrary *_lcd;
         DataFormat *_data;
         uint8_t _start = 0;
         uint8_t _width = 8;
